@@ -6,16 +6,23 @@
             <div class="col-10">
                 <form action="{{ route('admin.posts.store') }}" method="post">
                     @csrf
-    
+
                     <div class="mb-3">
                         <label for="title">Titolo</label>
                         <input type="text" name="title" id="title">
-                        <div id="titleHelp" class="form-text">Inserisci il titolo del tuo nuovo post</div>
                         @error('title')
                             <div class="alert alert-danger">
                                 {{ $message }}
                             </div>
                         @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="title">Scegli la/le categorie del tuo nuovo post</label>
+                        <br>
+                        @foreach ($categories as $category)
+                            <input class="form-check-input" type="checkbox" name="category[]" value="{{$category->id}}">
+                            <label for="categories" class="me-3">{{$category->name}}</label>
+                        @endforeach
                     </div>
                     <div class="mb-3">
                         <label for="image_url">Inserisci un'immagine</label>

@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use App\User;
 use App\Post;
+use App\Category;
 
 class postController extends Controller
 {
@@ -29,7 +28,9 @@ class postController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+
+        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -47,6 +48,7 @@ class postController extends Controller
         $newPost = new Post();
         $newPost->fill($data);
         $newPost->save();
+        $newPost->categories()->sync($data['category']);
 
         return redirect()->route('admin.posts.index')->with('message', $data['title']. " è stato pubblicato con successo.");
     }
@@ -70,7 +72,8 @@ class postController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', ["post" => $post]);
+        $categories = Category::all();
+        return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -84,9 +87,8 @@ class postController extends Controller
     {
         $data = $request->all();
 
-        $data['user_id'] = Auth::user()->id;
-
         $post->fill($data);
+        $post->categories()->sync($data['category']);
         $post->update();
 
         return redirect()->route('admin.posts.show', $post)->with('message', $data['title']. " è stato modificato con successo.");
@@ -101,7 +103,6 @@ class postController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-
         return redirect()->route('admin.posts.index')->with('deleted-message', "$post->title è stato eliminato con successo dalla lista dei post");
     }
 }

@@ -11,12 +11,19 @@
                     <div class="mb-3">
                         <label for="title">Titolo</label>
                         <input type="text" name="title" id="title" value="{{$post->title}}">
-                        <div id="titleHelp" class="form-text">Inserisci il titolo del tuo nuovo post</div>
                         @error('title')
                             <div class="alert alert-danger">
                                 {{ $message }}
                             </div>
                         @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="title">Scegli la/le categorie da modificare</label>
+                        <br>
+                        @foreach ($categories as $category)
+                            <input class="form-check-input" type="checkbox" name="category[]" value="{{$category->id}}" @if($post->categories->contains($category)) checked @endif>
+                            <label for="categories" class="me-3">{{$category->name}}</label>
+                        @endforeach
                     </div>
                     <div class="mb-3">
                         <label for="image_url">Inserisci un'immagine</label>

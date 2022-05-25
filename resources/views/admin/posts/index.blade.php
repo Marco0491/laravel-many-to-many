@@ -29,6 +29,7 @@
                         <tr>
                             <th>Titolo</th>
                             <th>Autore</th>
+                            <th>Categorie</th>
                             <th>Creato il</th>
                         </tr>
                     </thead>
@@ -44,6 +45,11 @@
                                     {{ $post->user->name }}
                                 </td>
                                 <td>
+                                    @foreach ($post->categories as $category)
+                                        <span class="badge rounded-pill bg-dark text-white">{{$category->name}}</span>
+                                    @endforeach
+                                </td>
+                                <td>
                                     {{ $post->user->created_at }}
                                 </td>
                                 {{-- <td>
@@ -56,7 +62,7 @@
                                     <form action="{{route('admin.posts.destroy', $post)}}" method="POST" class="post-form-destroyer" post-title="{{$post->title}}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"  class="btn btn-danger btn-sm ">Delete</a>
+                                        <button type="submit"  class="btn btn-danger btn-sm">Delete</a>
                                     </form>
                                 </td>
                             </tr>
